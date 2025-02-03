@@ -19,7 +19,7 @@ export const getOriginalUrlHandler = async (req, res) => {
   try {
     const originalUrl = await getOriginalUrl(req.params.shortId);
     originalUrl
-      ? res.redirect(originalUrl)
+      ? res.json(originalUrl)
       : res.status(404).json({ error: "URL not found" });
   } catch (error) {
     res.status(500).json({ error: "Redirect failed" });
