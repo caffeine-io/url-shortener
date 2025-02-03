@@ -8,8 +8,8 @@ import { specs } from "./config/swagger.js";
 
 const app = express();
 
-app.use(express.json(), express.urlencoded({ extended: true }));
 app.use(cors());
+app.use(express.json(), express.urlencoded({ extended: true }));
 app.use(apiLimiter);
 // Swagger documentation
 if (process.env.NODE_ENV === "development") {
