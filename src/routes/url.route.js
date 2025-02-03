@@ -55,21 +55,20 @@ router.post("/", validate(createUrlSchema), createUrlHandler);
  *       - in: path
  *         name: shortId
  *         required: true
- *         description: 7-character alphanumeric short URL identifier
  *         schema:
  *           type: string
  *           pattern: '^[a-zA-Z0-9]{7}$'
+ *         description: 7-character alphanumeric short URL identifier
  *     responses:
- *       302:
- *         description: Redirect to original URL
+ *       '200':
+ *         description: Original URL
  *         headers:
  *           Location:
  *             schema:
  *               type: string
- *               format: uri
- *             example: https://original-domain.com/long-url
- *       404:
+ *       '404':
  *         description: URL not found
+ *
  */
 router.get("/:shortId", validate(shortIdSchema), getOriginalUrlHandler);
 
