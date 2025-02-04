@@ -20,7 +20,7 @@ A URL shortening service built with Node.js, Express, MongoDB. Containerized wit
 
 ## Prerequisites 📋
 
-- Node.js v18+
+- Node.js v20+
 - Docker
 - MongoDB Atlas account or local MongoDB instance
 
