@@ -21,10 +21,9 @@ export const createShortUrl = async (originalUrl) => {
     console.log(shortId);
     const url = await createUrl(originalUrl, shortId);
     logger.info(`Created new short URL: ${process.env.BASE_URL}/${shortId}`);
-    console.log(url.shortId);
     return url.shortId;
   } catch (error) {
-    logger.error("Error creating short URL:", error);
+    logger.error("DB Error creating short URL:", error);
     throw error;
   }
 };
@@ -34,11 +33,11 @@ export const getOriginalUrl = async (shortId) => {
     const url = await incrementUrlClicks(shortId);
     if (!url) {
       logger.warn(`URL not found for shortId: ${shortId}`);
-      throw new Error("URL not found");
+      return null;
     }
-    return url?.originalUrl;
-  } catch {
-    logger.error(`Error retrieving URL for ${shortId}:`, error);
+    return url.originalUrl;
+  } catch (error) {
+    logger.error(`DB Error retrieving URL for ${shortId}:`, error);
     throw error;
   }
 };
@@ -48,11 +47,11 @@ export const getUrlStats = async (shortId) => {
     const url = await findUrlByShortId(shortId);
     if (!url) {
       logger.warn(`URL not found for shortId: ${shortId}`);
-      throw new Error("URL not found");
+      return null;
     }
     return url ? { clicks: url.clicks, createdAt: url.createdAt } : null;
   } catch (error) {
-    logger.error(`Error retrieving URL for ${shortId}:`, error);
+    logger.error(`DB Error retrieving URL for ${shortId}:`, error);
     throw error;
   }
 };
