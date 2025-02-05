@@ -4,8 +4,6 @@ import {
   getOriginalUrlHandler,
   getStatsHandler,
 } from "../controllers/url.controller.js";
-import { createUrlSchema, shortIdSchema } from "../validation/url.schema.js";
-import { validate } from "../middleware/validate.js";
 
 const router = express.Router();
 /**
@@ -43,7 +41,7 @@ const router = express.Router();
  *       429:
  *         description: Too many requests
  */
-router.post("/", validate(createUrlSchema), createUrlHandler);
+router.post("/", createUrlHandler);
 
 /**
  * @swagger
@@ -70,7 +68,7 @@ router.post("/", validate(createUrlSchema), createUrlHandler);
  *         description: URL not found
  *
  */
-router.get("/:shortId", validate(shortIdSchema), getOriginalUrlHandler);
+router.get("/:shortId", getOriginalUrlHandler);
 
 /**
  * @swagger
@@ -104,6 +102,6 @@ router.get("/:shortId", validate(shortIdSchema), getOriginalUrlHandler);
  *       404:
  *         description: URL not found
  */
-router.get("/:shortId/stats", validate(shortIdSchema), getStatsHandler);
+router.get("/:shortId/stats", getStatsHandler);
 
 export default router;
