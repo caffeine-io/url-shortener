@@ -5,6 +5,7 @@ import { apiLimiter } from "./middleware/rateLimit.js";
 import urlRoutes from "./routes/url.route.js";
 import swaggerUi from "swagger-ui-express";
 import { specs } from "./config/swagger.js";
+import logger from "./utils/logger.js";
 
 const app = express();
 
