@@ -2,7 +2,15 @@ import { z } from "zod";
 
 export const createUrlSchema = z.object({
   body: z.object({
-    originalUrl: z.string().url({ message: "Invalid URL format" }),
+    originalUrl: z
+      .string()
+      .url({ message: "Invalid URL format" })
+      .refine(
+        (url) => url.startsWith("http://") || url.startsWith("https://"),
+        {
+          message: "URL must include http:// or https://",
+        }
+      ),
   }),
 });
 
