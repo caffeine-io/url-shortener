@@ -19,7 +19,6 @@ const TARGET_LENGTH = 7;
 
 export function generateShortId() {
   const snowflake = Snowflake.generate();
-  console.log(snowflake);
   return toBase62(snowflake);
 }
 

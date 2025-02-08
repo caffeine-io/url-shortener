@@ -12,6 +12,19 @@ export const findUrlByShortId = async (shortId) => {
   return URL.findOne({ shortId });
 };
 
+export const findUrlAndUpdate = async (originalUrl, shortId) => {
+  return URL.findOneAndUpdate(
+    { originalUrl },
+    { $setOnInsert: { originalUrl, shortId } },
+    {
+      upsert: true,
+      new: true,
+      runValidators: true,
+      includeResultMetadata: true,
+    }
+  );
+};
+
 export const incrementUrlClicks = async (shortId) => {
   return URL.findOneAndUpdate(
     { shortId },

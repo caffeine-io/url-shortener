@@ -21,5 +21,5 @@ const urlSchema = new mongoose.Schema(
   }
 );
 urlSchema.index({ shortId: 1 }, { unique: true });
-urlSchema.index({ originalUrl: 1 });
+urlSchema.index({ originalUrl: 1 }, { unique: true });
 export const URL = mongoose.model("URL", urlSchema);
