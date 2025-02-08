@@ -17,8 +17,9 @@ export const createUrlHandler = async (req, res) => {
     });
   }
   try {
-    const shortUrl = await createShortUrl(req.body.originalUrl);
-    res.status(201).json({ shortUrl });
+    const { shortUrl, isNew } = await createShortUrl(req.body.originalUrl);
+    // Send 201 for new URLs, 200 for existing ones
+    res.status(isNew ? 201 : 200).json({ shortUrl });
   } catch (error) {
     logger.error("Error creating short URL:", error);
     res.status(500).json({ error: "Failed to create short URL" });
@@ -40,7 +41,7 @@ export const getOriginalUrlHandler = async (req, res) => {
       return res.status(404).json({ error: "URL not found" });
     }
 
-    res.json(originalUrl);
+    res.status(200).json({ originalUrl });
   } catch (error) {
     logger.error(
       `Failed to get original URL for ${req.params.shortId}:`,

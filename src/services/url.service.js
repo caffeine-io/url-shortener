@@ -1,6 +1,6 @@
 import {
-  createUrl,
   findByOriginalUrl,
+  findUrlAndUpdate,
   findUrlByShortId,
   incrementUrlClicks,
 } from "../repositories/url.repository.js";
@@ -9,20 +9,20 @@ import logger from "../utils/logger.js";
 
 export const createShortUrl = async (originalUrl) => {
   try {
-    // Check if URL already exists
-    const existingUrl = await findByOriginalUrl(originalUrl);
-    if (existingUrl) {
-      logger.info(`Existing URL found for: ${originalUrl}`);
-      return existingUrl.shortId;
-    }
-
-    // Generate short ID and create new URL
     const shortId = generateShortId();
-    console.log(shortId);
-    const url = await createUrl(originalUrl, shortId);
-    logger.info(`Created new short URL: ${process.env.BASE_URL}/${shortId}`);
-    return url.shortId;
+    const url = await findUrlAndUpdate(originalUrl, shortId);
+    // Check if the document was newly created
+    const isNew = !url.lastErrorObject.updatedExisting;
+    logger.info(
+      `Short URL: ${process.env.BASE_URL}/${url.value.shortId}, isNew: ${isNew}`
+    );
+    return { shortUrl: url.value.shortId, isNew: isNew };
   } catch (error) {
+    if (error.code === 11000) {
+      // Handle race condition: Another request already inserted the URL
+      const existingUrl = await findByOriginalUrl(originalUrl);
+      return { shortUrl: existingUrl.shortId, isNew: false };
+    }
     logger.error("DB Error creating short URL:", error);
     throw error;
   }
